@@ -3,104 +3,32 @@
 const fs = require(`fs`);
 const chalk = require(`chalk`);
 
-const {getRandomIntInclusive, getNumberWithZero, shuffleArray, splitText} = require(`../utils`);
-const {titleText, descriptionText, categoryText} = require(`../data`);
-
-const titleList = splitText(titleText);
-const descriptionList = splitText(descriptionText);
-const categoryList = splitText(categoryText);
-const typeList = [`offer`, `sale`];
-
-const options = {
-  minSize: 1,
-  maxSize: 1000,
-  fileName: `mock.json`,
-  template: {
-    title: ``,
-    picture: ``,
-    description: ``,
-    type: ``,
-    sum: 0,
-    category: [],
-  }
-};
+const {
+  FILE_MIN_LIMIT, FILE_MAX_LIMIT, FILE_NAME,
+  PICTURE_MIN_LIMIT, PICTURE_MAX_LIMIT,
+  DESCRIPTION_MIN_LIMIT, DESCRIPTION_MAX_LIMIT,
+  SUM_MIN_LIMIT, SUM_MAX_LIMIT,
+  EXIT_CODE
+} = require(`../constants`);
+const {getRandomIntInclusive, getNumberWithZero, shuffleArray} = require(`../utils`);
+const {titleList, descriptionList, categoryList, typeList} = require(`../data`);
 
 const messageType = {
   error: {
-    tooMuch: `Не больше ${options.maxSize} объявлений`
+    tooMuch: `Не больше ${FILE_MAX_LIMIT} объявлений`
   },
-  success: chalk`Данные соханены в файл {underline ${options.fileName}}`
-};
-
-const generateItem = (name) => {
-  const titleRange = {
-    min: 0
-  };
-  const pictureRange = {
-    min: 1,
-    max: 16
-  };
-  const descriptionRange = {
-    min: 0,
-    max: 5
-  };
-  const typeRange = {
-    min: 0,
-    max: 1
-  };
-  const sumRange = {
-    min: 1000,
-    max: 10000
-  };
-  const categoryRange = {
-    min: 0
-  };
-
-  let randomNumber;
-  let value;
-
-  switch (name) {
-    case `title`:
-      randomNumber = getRandomIntInclusive(titleRange.min, titleList.length - 1);
-      value = titleList[randomNumber];
-      break;
-    case `picture`:
-      randomNumber = getRandomIntInclusive(pictureRange.min, pictureRange.max);
-      value = `item${getNumberWithZero(randomNumber)}.jpg`;
-      break;
-    case `description`:
-      value = shuffleArray(descriptionList).slice(descriptionRange.min, descriptionRange.max).join(` `);
-      break;
-    case `type`:
-      randomNumber = getRandomIntInclusive(typeRange.min, typeRange.max);
-      value = typeList[randomNumber];
-      break;
-    case `sum`:
-      value = getRandomIntInclusive(sumRange.min, sumRange.max);
-      break;
-    case `category`:
-      randomNumber = getRandomIntInclusive(categoryRange.min, categoryList.length - 1);
-      value = [];
-      Array(randomNumber).fill().map((item, index) => {
-        return value.push(categoryList[index]);
-      });
-      break;
-  }
-
-  return value;
+  success: chalk`Данные соханены в файл {underline ${FILE_NAME}}`
 };
 
 const generateList = (count) => {
-  return Array(count).fill().map(() => {
-    let newTemplate = Object.assign({}, options.template);
-
-    for (const key in newTemplate) {
-      if (newTemplate.hasOwnProperty(key)) {
-        newTemplate[key] = generateItem(key);
-      }
-    }
-    return newTemplate;
-  });
+  return Array(count).fill({}).map(() => ({
+    title: titleList[getRandomIntInclusive(0, titleList.length - 1)],
+    picture: `item${getNumberWithZero(getRandomIntInclusive(PICTURE_MIN_LIMIT, PICTURE_MAX_LIMIT))}.jpg`,
+    description: shuffleArray(descriptionList).slice(DESCRIPTION_MIN_LIMIT, DESCRIPTION_MAX_LIMIT).join(` `),
+    type: typeList[getRandomIntInclusive(0, typeList.length - 1)],
+    sum: getRandomIntInclusive(SUM_MIN_LIMIT, SUM_MAX_LIMIT),
+    category: Array(getRandomIntInclusive(0, categoryList.length - 1)).fill().map((item, index) => categoryList[index]),
+  }));
 };
 
 const sendMessage = (error) => {
@@ -114,24 +42,25 @@ const sendMessage = (error) => {
 
 const saveFile = (data) => {
   try {
-    fs.writeFileSync(options.fileName, data);
+    fs.writeFileSync(FILE_NAME, data);
+    sendMessage();
   } catch (err) {
     sendMessage(err);
-    process.exit(1);
+    process.exitCode = EXIT_CODE.ERROR;
   }
 };
 
 const run = (count) => {
-  count = Number(count) || options.minSize;
+  count = Number(count) || FILE_MIN_LIMIT;
 
-  if (count > options.maxSize) {
+  if (count > FILE_MAX_LIMIT) {
     sendMessage(messageType.error.tooMuch);
-    process.exit(1);
+    process.exitCode = EXIT_CODE.ERROR;
+    return;
   }
 
   const data = JSON.stringify(generateList(count));
   saveFile(data);
-  sendMessage();
 };
 
 module.exports = {

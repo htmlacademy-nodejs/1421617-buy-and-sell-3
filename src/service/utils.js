@@ -18,13 +18,8 @@ const shuffleArray = (a) => {
   return a;
 };
 
-const splitText = (data) => {
-  return data.trim().split(`\n`);
-};
-
 module.exports = {
   getRandomIntInclusive,
   getNumberWithZero,
   shuffleArray,
-  splitText
 };
