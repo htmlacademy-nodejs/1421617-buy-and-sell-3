@@ -1,0 +1,17 @@
+'use strict';
+
+module.exports = {
+  FILE_MIN_LIMIT: 1,
+  FILE_MAX_LIMIT: 1000,
+  FILE_NAME: `mock.json`,
+  PICTURE_MIN_LIMIT: 1,
+  PICTURE_MAX_LIMIT: 16,
+  DESCRIPTION_MIN_LIMIT: 0,
+  DESCRIPTION_MAX_LIMIT: 5,
+  SUM_MIN_LIMIT: 1000,
+  SUM_MAX_LIMIT: 10000,
+  EXIT_CODE: {
+    SUCCESS: 0,
+    ERROR: 1
+  }
+};
