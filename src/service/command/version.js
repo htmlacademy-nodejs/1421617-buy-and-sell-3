@@ -2,7 +2,7 @@
 
 const packageFile = require(`../../../package`);
 const chalk = require(`chalk`);
-const message = chalk.bold(packageFile.version);
+const message = chalk.bold.blue(packageFile.version);
 
 const run = () => {
   console.log(message);
