@@ -4,23 +4,25 @@ const fs = require(`fs`).promises;
 const chalk = require(`chalk`);
 
 const {
-  FILE_MIN_LIMIT, FILE_MAX_LIMIT, FILE_NAME,
+  DATA_DIR, DATA_TITLES_FILE_NAME, DATA_SENTENCES_FILE_NAME, DATA_CATEGORIES_FILE_NAME,
+  MOCK_FILE_MIN_LIMIT, MOCK_FILE_MAX_LIMIT, MOCK_FILE_NAME,
   PICTURE_MIN_LIMIT, PICTURE_MAX_LIMIT,
   DESCRIPTION_MIN_LIMIT, DESCRIPTION_MAX_LIMIT,
   SUM_MIN_LIMIT, SUM_MAX_LIMIT,
   EXIT_CODE
 } = require(`../constants`);
 const {getRandomIntInclusive, getNumberWithZero, shuffleArray} = require(`../utils`);
-const {titleList, descriptionList, categoryList, typeList} = require(`../data`);
+
+const typeList = [`offer`, `sale`];
 
 const messageType = {
   error: {
-    tooMuch: `Не больше ${FILE_MAX_LIMIT} объявлений`
+    tooMuch: `Не больше ${MOCK_FILE_MAX_LIMIT} объявлений`
   },
-  success: chalk`{green Данные соханены в файл {underline ${FILE_NAME}}}`
+  success: chalk`{green Данные соханены в файл {underline ${MOCK_FILE_NAME}}}`
 };
 
-const generateList = (count) => {
+const generateList = (count, titleList, descriptionList, categoryList) => {
   return Array(count).fill({}).map(() => ({
     title: titleList[getRandomIntInclusive(0, titleList.length - 1)],
     picture: `item${getNumberWithZero(getRandomIntInclusive(PICTURE_MIN_LIMIT, PICTURE_MAX_LIMIT))}.jpg`,
@@ -42,7 +44,7 @@ const sendMessage = (error) => {
 
 const saveFile = async (data) => {
   try {
-    await fs.writeFile(FILE_NAME, data);
+    await fs.writeFile(MOCK_FILE_NAME, data);
     sendMessage();
   } catch (err) {
     sendMessage(err);
@@ -50,16 +52,30 @@ const saveFile = async (data) => {
   }
 };
 
-const run = (count) => {
-  count = Number(count) || FILE_MIN_LIMIT;
+const readFile = async (fileName) => {
+  try {
+    const text = await fs.readFile(DATA_DIR + fileName, `utf8`);
+    return text.trim().split(`\n`);
+  } catch (err) {
+    sendMessage(err);
+    return [];
+  }
+};
 
-  if (count > FILE_MAX_LIMIT) {
+const run = async (count) => {
+  count = +count || MOCK_FILE_MIN_LIMIT;
+
+  const titleList = await readFile(DATA_TITLES_FILE_NAME);
+  const descriptionList = await readFile(DATA_SENTENCES_FILE_NAME);
+  const categoryList = await await readFile(DATA_CATEGORIES_FILE_NAME);
+
+  if (count > MOCK_FILE_MAX_LIMIT) {
     sendMessage(messageType.error.tooMuch);
     process.exitCode = EXIT_CODE.ERROR;
     return;
   }
 
-  const data = JSON.stringify(generateList(count));
+  const data = JSON.stringify(generateList(count, titleList, descriptionList, categoryList));
   saveFile(data);
 };
 
