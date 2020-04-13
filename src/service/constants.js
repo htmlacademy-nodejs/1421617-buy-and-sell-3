@@ -1,6 +1,11 @@
 'use strict';
 
 module.exports = {
+  DEFAULT_PORT: 3000,
+  HTTP_CODE: {
+    SUCCESS: 200,
+    NOT_FOUND: 404
+  },
   FILE_MIN_LIMIT: 1,
   FILE_MAX_LIMIT: 1000,
   FILE_NAME: `mock.json`,
