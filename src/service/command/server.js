@@ -3,7 +3,7 @@
 const http = require(`http`);
 const chalk = require(`chalk`);
 const fs = require(`fs`).promises;
-const {DEFAULT_PORT, HTTP_CODE, FILE_NAME} = require(`../constants`);
+const {DEFAULT_PORT, HTTP_CODE, MOCK_FILE_NAME} = require(`../constants`);
 
 const sendResponse = (response, code, content) => {
   const template = `
@@ -28,7 +28,7 @@ const onClientConnect = async (request, response) => {
   switch (url) {
     case `/`:
       try {
-        const fileContent = await fs.readFile(FILE_NAME, `utf8`);
+        const fileContent = await fs.readFile(MOCK_FILE_NAME, `utf8`);
         const mockList = JSON.parse(fileContent);
         const titleList = mockList.map((item) => `<li>${item.title}</li>`).join(``);
 
