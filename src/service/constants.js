@@ -1,6 +1,11 @@
 'use strict';
 
 module.exports = {
+  DEFAULT_PORT: 3000,
+  HTTP_CODE: {
+    SUCCESS: 200,
+    NOT_FOUND: 404
+  },
   DATA_DIR: `./data/`,
   DATA_TITLES_FILE_NAME: `titles.txt`,
   DATA_SENTENCES_FILE_NAME: `sentences.txt`,
