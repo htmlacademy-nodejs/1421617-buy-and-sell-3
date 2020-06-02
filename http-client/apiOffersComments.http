@@ -1,0 +1,29 @@
+### POSITIVE создаёт новый комментарий
+POST http://localhost:3000/api/offers/t6k6Hq/comments
+Content-Type: application/json
+
+{
+  "text": "Новый комментарий!"
+}
+
+### NEGATIVE Отправка несуществующего поля
+POST http://localhost:3000/api/offers/t6k6Hq/comments
+Content-Type: application/json
+
+{
+  "texxt": "Новый комментарий!"
+}
+
+
+### POSITIVE удаляет из определённой публикации комментарий с идентификатором
+DELETE http://localhost:3000/api/offers/t6k6Hq/comments/FSLI4K
+
+### NEGATIVE удаляет из определённой публикации комментарий с идентификатором
+DELETE http://localhost:3000/api/offers/t6k6Hq/comments/123
+
+
+### POSITIVE возвращает список комментариев определённого объявления
+GET http://localhost:3000/api/offers/t6k6Hq/comments
+
+### NEGATIVE возвращает список комментариев определённого объявления
+GET http://localhost:3000/api/offers/123/comments

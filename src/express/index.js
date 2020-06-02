@@ -20,6 +20,7 @@ app
   .use(express.static(path.resolve(__dirname, PUBLIC_DIR)))
 
   .use((req, res) => res.status(400).render(`errors/400`))
+  // eslint-disable-next-line no-unused-vars
   .use((err, req, res, next) => res.status(500).render(`errors/500`))
 
   .set(`views`, path.resolve(__dirname, TEMPLATES_DIR))

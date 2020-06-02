@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node ./src/service/service.js",
     "test": "npm run eslint",
-    "eslint": "eslint --ext .js src/",
+    "eslint": "eslint --ignore-pattern 'src/express/public/*' --ext .js src/",
     "server": "nodemon ./src/service/service.js --server",
     "start-front-server": "nodemon ./src/express/index.js"
   },
@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "express": "4.17.1",
+    "nanoid": "3.1.9",
     "pug": "2.0.4"
   }
 }

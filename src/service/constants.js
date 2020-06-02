@@ -4,12 +4,14 @@ module.exports = {
   DEFAULT_PORT: 3000,
   HTTP_CODE: {
     SUCCESS: 200,
+    BAD_REQUEST: 400,
     NOT_FOUND: 404
   },
   DATA_DIR: `./data/`,
   DATA_TITLES_FILE_NAME: `titles.txt`,
   DATA_SENTENCES_FILE_NAME: `sentences.txt`,
   DATA_CATEGORIES_FILE_NAME: `categories.txt`,
+  DATA_COMMENTS_FILE_NAME: `comments.txt`,
   MOCK_FILE_MIN_LIMIT: 1,
   MOCK_FILE_MAX_LIMIT: 1000,
   MOCK_FILE_NAME: `mocks.json`,
@@ -19,8 +21,10 @@ module.exports = {
   DESCRIPTION_MAX_LIMIT: 5,
   SUM_MIN_LIMIT: 1000,
   SUM_MAX_LIMIT: 10000,
+  COMMENTS_MAX_LIMIT: 4,
   EXIT_CODE: {
     SUCCESS: 0,
     ERROR: 1
-  }
+  },
+  MAX_ID_LENGTH: 6
 };

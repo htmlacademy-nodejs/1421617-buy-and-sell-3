@@ -1,0 +1,67 @@
+### POSITIVE ресурс возвращает список объявлений
+GET http://localhost:3000/api/offers/
+
+
+### POSITIVE возвращает полную информацию определённого объявления
+GET http://localhost:3000/api/offers/t6k6Hq
+
+### NEGATIVE возвращает полную информацию определённого объявления
+GET http://localhost:3000/api/offers/123
+
+
+### POSITIVE создаёт новое объявление
+POST http://localhost:3000/api/offers
+Content-Type: application/json
+
+{
+  "title": "Продам VHS.",
+  "picture": "item123.jpg",
+  "description": "Товар в отличном состоянии.",
+  "type": "offer",
+  "sum": 123,
+  "category": [
+    "Видео"
+  ]
+}
+
+### NEGATIVE создаёт новое объявление
+POST http://localhost:3000/api/offers
+Content-Type: application/json
+
+{
+"type": "Куплю",
+"title": "Заголовок",
+"description": "Описание",
+"picture": "Картинка"
+}
+
+
+### POSITIVE редактирует определённое объявление
+PUT http://localhost:3000/api/offers/t6k6Hq
+Content-Type: application/json
+
+{
+  "title": "Продам VHS срочно.",
+  "picture": "item123.jpg",
+  "description": "Товар в отличном состоянии.",
+  "type": "offer",
+  "sum": 12,
+  "category": [
+    "Видео"
+  ]
+}
+
+### NEGATIVE редактирует определённое объявление
+PUT http://localhost:3000/api/offers/t6k6Hq
+Content-Type: application/json
+
+{
+  "name": "title"
+}
+
+
+### POSITIVE удаляет определённое объявление
+DELETE http://localhost:3000/api/offers/t6k6Hq
+
+### NEGATIVE удаляет определённое объявление
+DELETE http://localhost:3000/api/offers/123
