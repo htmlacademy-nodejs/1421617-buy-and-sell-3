@@ -1,0 +1,8 @@
+### POSITIVE
+GET http://localhost:3000/api/search?title=Продам
+
+### NEGATIVE
+GET http://localhost:3000/api/search?title=
+
+### NEGATIVE
+GET http://localhost:3000/api/search?title=asd
