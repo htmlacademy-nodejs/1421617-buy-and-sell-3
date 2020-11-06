@@ -7,6 +7,7 @@ module.exports = {
     BAD_REQUEST: 400,
     NOT_FOUND: 404
   },
+  LOGS_DIR: `./src/service/logs`,
   DATA_DIR: `./data/`,
   DATA_TITLES_FILE_NAME: `titles.txt`,
   DATA_SENTENCES_FILE_NAME: `sentences.txt`,

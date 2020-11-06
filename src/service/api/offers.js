@@ -10,6 +10,9 @@ const {
 
 const route = new Router();
 
+const {getLogger} = require(`../logger`);
+const logger = getLogger();
+
 module.exports = (app, offerService, commentService) => {
   app.use(`/offers`, route);
 
@@ -18,13 +21,15 @@ module.exports = (app, offerService, commentService) => {
     const categories = offerService.findAll();
     res.status(HTTP_CODE.SUCCESS)
       .json(categories);
+    return logger.info(`End request with status code ${res.statusCode}`);
   });
 
   // возвращает полную информацию определённого объявления
   route.get(`/:offerId`, offerExist(offerService), (req, res) => {
     const {offer} = res.locals;
 
-    return res.status(HTTP_CODE.SUCCESS).json(offer);
+    res.status(HTTP_CODE.SUCCESS).json(offer);
+    return logger.info(`End request with status code ${res.statusCode}`);
   });
 
   // создаёт новое объявление
@@ -32,7 +37,8 @@ module.exports = (app, offerService, commentService) => {
     const {body} = req;
     const offer = offerService.create(body);
 
-    return res.status(HTTP_CODE.SUCCESS).json(offer);
+    res.status(HTTP_CODE.SUCCESS).json(offer);
+    return logger.info(`End request with status code ${res.statusCode}`);
   });
 
   // редактирует определённое объявление
@@ -41,7 +47,8 @@ module.exports = (app, offerService, commentService) => {
     const {body} = req;
     const resOffer = offerService.update(offer, body);
 
-    return res.status(HTTP_CODE.SUCCESS).json(resOffer);
+    res.status(HTTP_CODE.SUCCESS).json(resOffer);
+    return logger.info(`End request with status code ${res.statusCode}`);
   });
 
   // удаляет определённое объявление
@@ -49,7 +56,8 @@ module.exports = (app, offerService, commentService) => {
     const {offer} = res.locals;
     const resOffer = offerService.drop(offer);
 
-    return res.status(HTTP_CODE.SUCCESS).json(resOffer);
+    res.status(HTTP_CODE.SUCCESS).json(resOffer);
+    return logger.info(`End request with status code ${res.statusCode}`);
   });
 
   // создаёт новый комментарий
@@ -58,7 +66,8 @@ module.exports = (app, offerService, commentService) => {
     const {body} = req;
     const comment = commentService.create(offer, body);
 
-    return res.status(HTTP_CODE.SUCCESS).json(comment);
+    res.status(HTTP_CODE.SUCCESS).json(comment);
+    return logger.info(`End request with status code ${res.statusCode}`);
   });
 
   // удаляет из определённой публикации комментарий с идентификатором
@@ -68,10 +77,12 @@ module.exports = (app, offerService, commentService) => {
     const comment = commentService.drop(offer, commentId);
 
     if (!comment) {
-      return res.status(HTTP_CODE.NOT_FOUND).send(`Comment with ${commentId} not found`);
+      res.status(HTTP_CODE.NOT_FOUND).send(`Comment with ${commentId} not found`);
+      return logger.info(`End request with status code ${res.statusCode}`);
     }
 
-    return res.status(HTTP_CODE.SUCCESS).json(comment);
+    res.status(HTTP_CODE.SUCCESS).json(comment);
+    return logger.info(`End request with status code ${res.statusCode}`);
   });
 
   // возвращает полную информацию определённого объявления
@@ -79,6 +90,7 @@ module.exports = (app, offerService, commentService) => {
     const {offer} = res.locals;
     const comments = commentService.findAll(offer);
 
-    return res.status(HTTP_CODE.SUCCESS).json(comments);
+    res.status(HTTP_CODE.SUCCESS).json(comments);
+    return logger.info(`End request with status code ${res.statusCode}`);
   });
 };

@@ -5,6 +5,9 @@ const {HTTP_CODE} = require(`../constants`);
 
 const route = new Router();
 
+const {getLogger} = require(`../logger`);
+const logger = getLogger();
+
 module.exports = (app, service) => {
   app.use(`/search`, route);
 
@@ -13,13 +16,16 @@ module.exports = (app, service) => {
     const result = service.search(title);
 
     if (!title) {
-      return res.status(HTTP_CODE.BAD_REQUEST).send(`Bad request`);
+      res.status(HTTP_CODE.BAD_REQUEST).send(`Bad request`);
+      return logger.info(`End request with status code ${res.statusCode}`);
     }
 
     if (!result.length) {
-      return res.status(HTTP_CODE.NOT_FOUND).send(`Not found offer`);
+      res.status(HTTP_CODE.SUCCESS).json([]);
+      return logger.info(`End request with status code ${res.statusCode}`);
     }
 
-    return res.status(HTTP_CODE.SUCCESS).json(result);
+    res.status(HTTP_CODE.SUCCESS).json(result);
+    return logger.info(`End request with status code ${res.statusCode}`);
   });
 };
