@@ -3,20 +3,18 @@
 const {Router} = require(`express`);
 const {HTTP_CODE} = require(`../constants`);
 
-const route = new Router();
-
 const {getLogger} = require(`../logger`);
-const logger = getLogger();
 
-module.exports = (app, service) => {
-  app.use(`/search`, route);
+module.exports = (service) => {
+  const route = new Router();
+  const logger = getLogger();
 
   route.get(`/`, (req, res) => {
     const {title} = req.query;
     const result = service.search(title);
 
     if (!title) {
-      res.status(HTTP_CODE.BAD_REQUEST).send(`Bad request`);
+      res.status(HTTP_CODE.BAD_REQUEST).json({message: `Bad request`});
       return logger.info(`End request with status code ${res.statusCode}`);
     }
 
@@ -28,4 +26,6 @@ module.exports = (app, service) => {
     res.status(HTTP_CODE.SUCCESS).json(result);
     return logger.info(`End request with status code ${res.statusCode}`);
   });
+
+  return route;
 };

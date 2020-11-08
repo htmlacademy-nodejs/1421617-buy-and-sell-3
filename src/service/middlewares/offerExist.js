@@ -10,7 +10,7 @@ module.exports = (service) => (req, res, next) => {
 
   if (!offer) {
     res.status(HTTP_CODE.NOT_FOUND)
-      .send(`Offer with ${offerId} not found`);
+      .json({message: `Offer with ${offerId} not found`});
     return logger.info(`End request with status code ${res.statusCode}`);
   }
 

@@ -5,7 +5,7 @@ const categories = require(`./categories`);
 const offers = require(`./offers`);
 const search = require(`./search`);
 
-const {getMockDataSync} = require(`../lib/get-mock-data`);
+const {getMockData} = require(`../lib/get-mock-data`);
 const {
   CategoryService,
   OfferService,
@@ -13,11 +13,15 @@ const {
   SearchService
 } = require(`../data-service`);
 
-const router = new Router();
-const mockData = getMockDataSync();
+const routes = async () => {
+  const router = new Router();
+  const mockData = await getMockData();
 
-categories(router, new CategoryService(mockData));
-offers(router, new OfferService(mockData), new CommentService());
-search(router, new SearchService(mockData));
+  router.use(`/categories`, categories(new CategoryService(mockData)));
+  router.use(`/offers`, offers(new OfferService(mockData), new CommentService()));
+  router.use(`/search`, search(new SearchService(mockData)));
 
-module.exports = router;
+  return router;
+};
+
+module.exports = routes;

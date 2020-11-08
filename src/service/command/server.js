@@ -9,18 +9,18 @@ const app = express();
 const {getLogger} = require(`../logger`);
 const logger = getLogger();
 
-const run = (port, mode = `listen`) => {
+const run = async (port, mode = `listen`) => {
   port = port || DEFAULT_PORT;
 
   app
     .use(express.json())
     .use((req, res, next) => {
-      logger.debug(`Start request to url ${req.url}`);
+      logger.debug(`Start request type ${req.method} to url ${req.url}`);
       next();
     })
-    .use(`/api`, routes)
+    .use(`/api`, await routes())
     .use((req, res) => {
-      res.status(HTTP_CODE.NOT_FOUND).send(`Not found`);
+      res.status(HTTP_CODE.NOT_FOUND).json({message: `Not found`});
 
       // Записываем, что запрос закончился неудачей
       logger.error(`End request with error ${res.statusCode}`);

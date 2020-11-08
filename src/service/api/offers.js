@@ -8,13 +8,11 @@ const {
   commentValidator,
 } = require(`../middlewares`);
 
-const route = new Router();
-
 const {getLogger} = require(`../logger`);
-const logger = getLogger();
 
-module.exports = (app, offerService, commentService) => {
-  app.use(`/offers`, route);
+module.exports = (offerService, commentService) => {
+  const route = new Router();
+  const logger = getLogger();
 
   // ресурс возвращает список объявлений
   route.get(`/`, (req, res) => {
@@ -77,7 +75,7 @@ module.exports = (app, offerService, commentService) => {
     const comment = commentService.drop(offer, commentId);
 
     if (!comment) {
-      res.status(HTTP_CODE.NOT_FOUND).send(`Comment with ${commentId} not found`);
+      res.status(HTTP_CODE.NOT_FOUND).json({message: `Comment with ${commentId} not found`});
       return logger.info(`End request with status code ${res.statusCode}`);
     }
 
@@ -93,4 +91,6 @@ module.exports = (app, offerService, commentService) => {
     res.status(HTTP_CODE.SUCCESS).json(comments);
     return logger.info(`End request with status code ${res.statusCode}`);
   });
+
+  return route;
 };

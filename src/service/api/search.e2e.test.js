@@ -1,7 +1,13 @@
 'use strict';
 
 const request = require(`supertest`);
-const server = require(`../command/server`).run(null, `test`);
+const {run} = require(`../command/server`);
+
+let server;
+
+beforeAll(async () => {
+  server = await run(null, `test`);
+});
 
 describe(`Search API end-points`, () => {
   test(`When get search result status code should be 200`, async () => {

@@ -1,12 +1,9 @@
 'use strict';
 
 const request = require(`supertest`);
-const server = require(`../command/server`).run(null, `test`);
-const {getMockDataSync} = require(`../lib/get-mock-data`);
+const {run} = require(`../command/server`);
+const {getMockData} = require(`../lib/get-mock-data`);
 
-const mockData = getMockDataSync();
-const mockOffer = mockData[0];
-const mockOfferId = mockOffer.id;
 const mockNewComment = {
   text: `Новый комментарий!`
 };
@@ -20,6 +17,18 @@ const mockNewOffer = {
     `Видео`
   ]
 };
+
+let server;
+let mockData;
+let mockOffer;
+let mockOfferId;
+
+beforeAll(async () => {
+  server = await run(null, `test`);
+  mockData = await getMockData();
+  mockOffer = mockData[0];
+  mockOfferId = mockOffer.id;
+});
 
 describe(`Offers API end-points`, () => {
   describe(`Get offers`, () => {
